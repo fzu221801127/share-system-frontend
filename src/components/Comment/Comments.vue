@@ -59,7 +59,7 @@
                 >点赞</el-button
               > -->
               <br>
-              <span style="font-size: 15px">{{ comment.releaseTime }}</span>
+              <span style="font-size: 15px;margin-right:10px">{{ comment.releaseTime }}</span>
               <el-button type="text">举报</el-button>
               <br>
               <el-button
@@ -104,9 +104,6 @@ export default {
       default: '0'
     }
   },
-  computed: {
-    ...mapGetters(['token', 'user'])
-  },
   data() {
     return {
       firstCommentId: 0,
@@ -115,6 +112,9 @@ export default {
       // avatar
       imgUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
     }
+  },
+  computed: {
+    ...mapGetters(['token', 'user'])
   },
   created() {
     this.FirstComment()
@@ -145,12 +145,14 @@ export default {
         {
           id: 1,
           author: 'zzz',
-          content: '嘎洒还干啥回归到谁goisdhfgiohsioaghigsagsoaighousahgoushaguohasuoghuoshaguishagsdagsijabgksbgiusbauigbuisguisuiaguisguisauigiusaguisauisauihauig79y7oashoui5h32oi15hoih435oih23oi5h1io4h5ioh14o5h打鬼煞鬼十大尴尬ui杀鬼划时代i鬼煞鬼i刷的过 沙蒂固ui撒大噶iusaui公司丢谁啊的归属'
+          content: '嘎洒还干啥回归到谁goisdhfgiohsioaghigsagsoaighousahgoushaguohasuoghuoshaguishagsdagsijabgksbgiusbauigbuisguisuiaguisguisauigiusaguisauisauihauig79y7oashoui5h32oi15hoih435oih23oi5h1io4h5ioh14o5h打鬼煞鬼十大尴尬ui杀鬼划时代i鬼煞鬼i刷的过 沙蒂固ui撒大噶iusaui公司丢谁啊的归属',
+          releaseTime: '2021-05-11 22:25:00'
         },
         {
           id: 3,
           author: '公司大',
-          content: '哦i更少个傻瓜公司大规划'
+          content: '哦i更少个傻瓜公司大规划',
+          releaseTime: '2021-05-11 22:25:21'
         }
       ]
     }

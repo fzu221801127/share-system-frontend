@@ -70,16 +70,17 @@
             </el-main>
             <el-footer height="120px">
               <div style="float: right">
-                <el-button
+                <!-- <el-button
                   round
                   style="background-color: #ff4949; color: white"
                   @click="thumb()"
                 >{{ thumbname }}
-                </el-button>
+                </el-button> -->
                 <el-button
                   type="warning"
                   icon="el-icon-star-off"
                   circle
+                  style="float:right"
                   @click="collection()"
                 />
                 <br>
@@ -95,11 +96,11 @@
         </el-container>
       </el-container>
       <div>
-        <v-Comments :blog-id="this.getRequest().key" />
+        <v-Comments :blog-id="getRequest().key" />
       </div>
       <br>
       <div>
-        <v-CreateComment :blog-id="this.getRequest().key" />
+        <v-CreateComment :blog-id="getRequest().key" />
       </div>
     </div>
   </div>
@@ -125,7 +126,7 @@ export default {
       title: '尴尬的就不会更加快速改归谁啊噶啥更是个大傻瓜发士大夫干啥的哦i韩国i哦萨汗国干啥干啥给撒噶时光',
       content: '古u干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复',
       releaseTime: '2022-02-01',
-      likeNumber: '5'
+      clicks: '5'
     }
     return {
       blog,

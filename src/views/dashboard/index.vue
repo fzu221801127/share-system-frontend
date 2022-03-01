@@ -1,30 +1,44 @@
+//在Echarts.vue文件中
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+  <div class="Echarts">
+    <div id="main" style="width: 600px;height: 400px;" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
+  name: 'Echarts',
+  mounted() {
+    this.myEcharts()
+  },
+  methods: {
+    myEcharts() {
+      var myChart = this.$echarts.init(document.getElementById('main'))
+      // 配置图表
+      var option = {
+        title: {
+          text: 'echarts入门示例1'
+        },
+        tooltip: {},
+        legend: {
+          data: ['销量']
+        },
+        xAxis: {
+          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+        },
+        yAxis: {},
+        series: [{
+          name: '销量',
+          type: 'bar',
+          data: [5, 20, 36, 10, 10, 20]
+        }]
+      }
+      myChart.setOption(option)
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
+<style>
+
 </style>

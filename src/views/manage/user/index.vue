@@ -10,7 +10,7 @@
 <template>
   <div class="app-container">
     <div>
-      <span>姓名</span>
+      <span>昵称</span>
       <el-input
         v-model="input"
         placeholder="请输入内容"
@@ -23,14 +23,17 @@
     <div>
       <mydialog style="display:inline;margin-right:1%" button-name="增加" @clicksubmit="insertStudent">
         <el-form :model="form">
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-form-item label="账号" :label-width="formLabelWidth">
+            <el-input v-model="form.id" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="昵称" :label-width="formLabelWidth">
             <el-input v-model="form.name" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="性别" :label-width="formLabelWidth">
-            <el-select v-model="form.sex" placeholder="性别">
-              <el-option label="男" value="男">男</el-option>
-              <el-option label="女" value="女">女</el-option>
-            </el-select>
+          <el-form-item label="手机号" :label-width="formLabelWidth">
+            <el-input v-model="form.phone" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="签名" :label-width="formLabelWidth">
+            <el-input v-model="form.signature" autocomplete="off" />
           </el-form-item>
           <el-form-item label="生日" :label-width="formLabelWidth">
             <el-input v-model="form.birthday" autocomplete="off" />
@@ -54,17 +57,22 @@
       />
       <el-table-column
         prop="id"
-        label="序号"
+        label="账号"
         width="120"
       />
       <el-table-column
         prop="name"
-        label="姓名"
+        label="昵称"
         width="120"
       />
       <el-table-column
-        prop="sex"
-        label="性别"
+        prop="phone"
+        label="手机号"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="signature"
+        label="签名"
         show-overflow-tooltip
       />
       <el-table-column
@@ -87,14 +95,17 @@
               @clicksubmit="updateStudent(scope.row.id)"
             >
               <el-form :model="form">
-                <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-form-item label="账号" :label-width="formLabelWidth">
+                  <el-input v-model="form.id" autocomplete="off" />
+                </el-form-item>
+                <el-form-item label="昵称" :label-width="formLabelWidth">
                   <el-input v-model="form.name" autocomplete="off" />
                 </el-form-item>
-                <el-form-item label="性别" :label-width="formLabelWidth">
-                  <el-select v-model="form.sex" placeholder="性别">
-                    <el-option label="男" value="男">男</el-option>
-                    <el-option label="女" value="女">女</el-option>
-                  </el-select>
+                <el-form-item label="手机号" :label-width="formLabelWidth">
+                  <el-input v-model="form.phone" autocomplete="off" />
+                </el-form-item>
+                <el-form-item label="签名" :label-width="formLabelWidth">
+                  <el-input v-model="form.signature" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="生日" :label-width="formLabelWidth">
                   <el-input v-model="form.birthday" autocomplete="off" />
@@ -109,8 +120,6 @@
 </template>
 
 <script>
-import { getStudentList, searchStudentByName, updateStudent,
-  insertStudent, deleteStudentById } from '@/api/student'
 import Mydialog from '@/components/Mydialog'
 export default {
   components: {
@@ -119,14 +128,47 @@ export default {
   filters: {},
   data() {
     return {
-      list: null,
+      list: [
+        { id: 'abc123',
+          name: '郑龙嗨',
+          phone: '18955551234',
+          birthday: '2000-02-03',
+          signature: '这是一条签名' },
+        { id: 'abc111',
+          name: '啊啊啊法撒旦发发士大夫撒旦发士大夫士大夫',
+          phone: '18955551211',
+          birthday: '2000-02-03',
+          signature: '刮痧跟' },
+        { id: 'abc222',
+          name: '水水水',
+          phone: '18955551222',
+          birthday: '2000-02-03',
+          signature: '感受到的是' },
+        { id: 'abc',
+          name: '事实上',
+          phone: '18955551233',
+          birthday: '',
+          signature: '下次发顺丰的' },
+        { id: '123',
+          name: '在这种',
+          phone: '18955551244',
+          birthday: '2000-02-03',
+          signature: '故事大纲' },
+        { id: 'admin',
+          name: '胜多负',
+          phone: '18955551255',
+          birthday: '2000-02-03',
+          signature: '真不法撒旦飞洒地方士大夫士大夫士大夫是错' }
+      ],
       listLoading: true,
       input: '',
       multipleSelection: [],
       form: {
+        id: '',
         name: '',
-        sex: '',
-        birthday: ''
+        phone: '',
+        birthday: '',
+        signature: ''
       },
       formLabelWidth: '120px'
     }
@@ -138,11 +180,11 @@ export default {
   methods: {
     fetchData() {
       console.log('加载表格')
-      this.listLoading = true
-      getStudentList().then(response => {
-        this.list = response
-        this.listLoading = false
-      })
+      // this.listLoading = true
+      // getStudentList().then(response => {
+      //   this.list = response
+      this.listLoading = false
+      // })
     },
     /*
      *@description:插入学生
@@ -151,15 +193,15 @@ export default {
      *@version: V1.0.0
     */
     insertStudent() {
-      insertStudent(this.form).then(response => {
-        console.log('表单如下:' + this.form)
-        if (response) {
-          this.$message({
-            type: 'success',
-            message: '添加成功!'
-          })
-        }
-      })
+      // insertStudent(this.form).then(response => {
+      //   console.log('表单如下:' + this.form)
+      //   if (response) {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '添加成功!'
+      //     })
+      //   }
+      // })
       setTimeout(function() {
         location.reload()
       }, 500)
@@ -172,30 +214,30 @@ export default {
     */
     deleteStudentById(id) {
       console.log('要删除的Id如下' + id)
-      this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteStudentById(id).then(response => {
-          console.log('Id如下:' + id)
-          console.log(response)
-          if (response) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-          }
-          setTimeout(function() {
-            location.reload()
-          }, 500)
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
+      // this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      //   deleteStudentById(id).then(response => {
+      //     console.log('Id如下:' + id)
+      //     console.log(response)
+      //     if (response) {
+      //       this.$message({
+      //         type: 'success',
+      //         message: '删除成功!'
+      //       })
+      //     }
+      //     setTimeout(function() {
+      //       location.reload()
+      //     }, 500)
+      //   })
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消删除'
+      //   })
+      // })
     },
     /*
      *@description:通过idSet批量删除选中学生
@@ -217,11 +259,11 @@ export default {
         type: 'warning'
       }).then(() => {
         idSet.forEach(element => {
-          deleteStudentById(element).then(response => {
-            if (response) {
-              console.log('删除一条数据')
-            }
-          })
+          // deleteStudentById(element).then(response => {
+          //   if (response) {
+          //     console.log('删除一条数据')
+          //   }
+          // })
         })
         this.$message({
           type: 'success',
@@ -244,21 +286,21 @@ export default {
      *@version: V1.0.0
     */
     updateStudent(id) {
-      var student = {
-        id: id,
-        name: this.form.name,
-        sex: this.form.sex,
-        birthday: this.form.birthday
-      }
-      updateStudent(student).then(response => {
-        console.log('更新该学生使用的数据如下:' + student)
-        if (response) {
-          this.$message({
-            type: 'success',
-            message: '更新成功!'
-          })
-        }
-      })
+      // var student = {
+      //   id: id,
+      //   name: this.form.name,
+      //   sex: this.form.sex,
+      //   birthday: this.form.birthday
+      // }
+      // updateStudent(student).then(response => {
+      //   console.log('更新该学生使用的数据如下:' + student)
+      //   if (response) {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '更新成功!'
+      //     })
+      //   }
+      // })
       setTimeout(function() {
         location.reload()
       }, 500)
@@ -274,11 +316,11 @@ export default {
       if (!this.input) {
         this.fetchData()
       } else {
-        searchStudentByName(this.input).then(response => {
-          console.log('搜索输入框内容为:' + this.input)
-          this.list = response
-          this.listLoading = false
-        })
+        // searchStudentByName(this.input).then(response => {
+        //   console.log('搜索输入框内容为:' + this.input)
+        //   this.list = response
+        //   this.listLoading = false
+        // })
       }
     },
     handleSelectionChange(val) {
