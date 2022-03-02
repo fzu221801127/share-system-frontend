@@ -117,13 +117,13 @@ export const constantRoutes = [
         component: () => import('@/views/report/post/index'), // Parent router-view
         name: 'Post',
         meta: { title: '被举报资源' }
-      },
-      {
-        path: 'comment',
-        component: () => import('@/views/report/comment/index'),
-        name: 'Comment',
-        meta: { title: '被举报评论' }
       }
+      // {
+      //   path: 'comment',
+      //   component: () => import('@/views/report/comment/index'),
+      //   name: 'Comment',
+      //   meta: { title: '被举报评论' }
+      // }
     ]
   },
 
