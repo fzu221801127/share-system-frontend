@@ -60,7 +60,7 @@
               > -->
               <br>
               <span style="font-size: 15px;margin-right:10px">{{ comment.releaseTime }}</span>
-              <el-button type="text">举报</el-button>
+              <!-- <el-button type="text">举报</el-button> -->
               <br>
               <el-button
                 type="text"

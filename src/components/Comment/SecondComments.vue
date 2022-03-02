@@ -64,7 +64,7 @@
                 style="background-color: #ff4949; color: white; font-size: 3px"
                 >点赞</el-button
               > -->
-              <el-button type="text">举报</el-button>
+              <!-- <el-button type="text">举报</el-button> -->
             </div>
           </el-footer>
         </el-container>
