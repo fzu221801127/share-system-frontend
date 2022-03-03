@@ -131,7 +131,6 @@
       >
         <template slot-scope="scope">
           <el-button type="text" @click="deleteStudentById(scope.row.id)">删除</el-button>
-          <el-button type="text" @click="deleteStudentById(scope.row.id)">恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
