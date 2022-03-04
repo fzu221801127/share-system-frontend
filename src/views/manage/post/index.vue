@@ -70,7 +70,6 @@
       </el-table-column>
       <el-table-column
         type="selection"
-        width="25px"
       />
       <el-table-column
         prop="id"
