@@ -35,7 +35,7 @@
       @selection-change="handleSelectionChange"
     >
       <!--最左边尖括号展开-->
-      <el-table-column type="expand">
+      <el-table-column type="expand" width="25px">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="id">
@@ -70,7 +70,7 @@
       </el-table-column>
       <el-table-column
         type="selection"
-        width="30px"
+        width="25px"
       />
       <el-table-column
         prop="id"
@@ -90,7 +90,7 @@
             class="is-size-6"
             @click="detailById(props.row.id)"
           >
-            {{ Substr(props.row.title, 0, 250) }}
+            {{ Substr(props.row.title, 0, 200) }}
           </el-link>
         </template>
       </el-table-column>
@@ -101,7 +101,7 @@
       >
         <template slot-scope="props">
           <span>
-            {{ Substr(props.row.content, 0, 250) }}
+            {{ Substr(props.row.content, 0, 200) }}
           </span>
         </template>
       </el-table-column>
@@ -133,14 +133,14 @@
         prop="click"
         label="点击量"
         sortable
-        width="80px"
+        width="90px"
         column-key="click"
         align="center"
       />
       <el-table-column
         prop="opera"
         label="操作"
-        width="80px"
+        width="70px"
         show-overflow-tooltip
       >
         <template slot-scope="scope">
@@ -148,11 +148,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      style="text-align:center"
+      :total="total"
+      :page-sizes="[10, 20, 30]"
+      layout="total, sizes, prev, pager, next, jumper"
+      :page-size="pageSize"
+      :current-page="currentPage"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
 <script>
-import { getPostList, searchPostByTitle, deletePostById } from '@/api/post'
+import { searchPostByTitle, deletePostById, getPostPageList } from '@/api/post'
 
 export default {
   components: {
@@ -220,7 +230,10 @@ export default {
         birthday: '',
         signature: ''
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      currentPage: 1,
+      pageSize: 10,
+      total: 1
     }
   },
   created() {
@@ -231,13 +244,15 @@ export default {
     fetchData() {
       console.log('加载表格')
       this.listLoading = true
-      getPostList().then(response => {
-        this.list = response
+      getPostPageList(this.currentPage, this.pagesize).then(response => {
+        this.list = response.page.list
+        this.total = response.page.total
         this.listLoading = false
-        console.log(this.list)
+        console.log(response)
       })
     },
     Substr(str, start, n) {
+      if (str == null) return null
       // eslint-disable-line
       if (str.replace(/[\u4e00-\u9fa5]/g, '**').length <= n) {
         return str
@@ -276,6 +291,16 @@ export default {
       const property = column['property']
       return row[property] === value
     },
+    handleSizeChange(val) {
+      this.pagesize = val
+      this.currentPage = 1
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.fetchData()
+    },
+
     /*
      *@description:插入学生
      *@author: zhuangweilong
