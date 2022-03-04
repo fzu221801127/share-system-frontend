@@ -57,16 +57,16 @@
                   text-align: center;
                 "
               >
-                {{ blog.author }}
+                {{ blog.userId }}
               </div>
             </div>
           </el-aside>
           <el-container>
-            <el-main style="font-size: 18px">
+            <el-main style="">
               <!--Markdown-->
-              <!-- <div id="preview" /> -->
+              <div id="preview" />
 
-              <div>{{ blog.content }}</div>
+              <!-- <div>{{ blog.content }}</div> -->
             </el-main>
             <el-footer height="120px">
               <div style="float: right">
@@ -84,7 +84,7 @@
                   @click="collection()"
                 />
                 <br>
-                <span style="font-size: 15px">{{ blog.releaseTime }}</span>
+                <span style="font-size: 15px;margin-right:10px">{{ blog.releaseTime }}</span>
                 <el-button
                   type="text"
                   style="color: black"
@@ -113,6 +113,7 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import CreateComment from '@/components/Comment/CreateComment'
 import Comments from '@/components/Comment/Comments'
+import { getPostById } from '@/api/post'
 
 export default {
   name: 'Detail',
@@ -122,17 +123,17 @@ export default {
   },
   data() {
     const blog = {
-      author: 'zzzzzzzzzzzzzddddddggaggsagsgsdagsagsdwl',
+      userId: 'zzzzzzzzzzzzzddddddggaggsagsgsdagsagsdwl',
       title: '尴尬的就不会更加快速改归谁啊噶啥更是个大傻瓜发士大夫干啥的哦i韩国i哦萨汗国干啥干啥给撒噶时光',
       content: '古u干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复沙山东ui哦好风水哦大会复干啥干啥韩国收到固沙山东ui哦好风水哦大会复',
-      releaseTime: '2022-02-01',
-      clicks: '5'
+      releaseTime: '2021-05-10 22:25:23',
+      click: '5'
     }
     return {
       blog,
-      title: '',
-      content: '',
-      authorName: '',
+      // title: '',
+      // content: '',
+      // authorName: '',
       canthumb: true, // 是否可以点赞
       thumbname: '点赞',
       // avatar
@@ -225,16 +226,12 @@ export default {
      *@version: V1.0.0
      */
     getBlogDetails() {
-      // var params = {
-      //   blogId: this.getRequest().key
-      //   // blogId: "7",
-      // }
       console.log('key=' + this.getRequest().key)
-      // getBlogById(params).then((response) => {
-      //   console.log(response.data.data)
-      //   this.blog = response.data.data
-      // this.renderMarkdown(this.blog.content)
-      // })
+      getPostById(this.getRequest().key).then((response) => {
+        console.log(response)
+        this.blog = response
+        this.renderMarkdown(this.blog.content)
+      })
     },
     /**
      *@functionName:  getRequest
