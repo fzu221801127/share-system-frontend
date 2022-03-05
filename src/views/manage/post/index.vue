@@ -433,6 +433,8 @@ export default {
         searchPostByTitle(this.input).then(response => {
           console.log('搜索输入框内容为:' + this.input)
           this.list = response
+          this.currentPage = 1
+          this.total = 10
           this.listLoading = false
         })
       }
