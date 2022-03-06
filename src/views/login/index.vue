@@ -1,12 +1,15 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" :style="{backgroundImage: 'url(' + img + ')'}">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <div class="title" style="color:#90CA6C;">
+          <img :src="img2" alt="网站图标" width="55px" height="50px" style="vertical-align:text-bottom;margin-right:15px">
+          <span style="font-size:35px;">资源分享网后台</span>
+        </div>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="username" style="border:1px solid #90CA6C">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
@@ -21,7 +24,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="password" style="border:1px solid #90CA6C">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -41,9 +44,9 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;background-color:#90CA6C;border:1px solid #90CA6C" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
+      <div class="tips" style="float:right">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
       </div>
@@ -83,7 +86,9 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      img: require('@/assets/preview.jpg'),
+      img2: require('@/assets/book.png')
     }
   },
   watch: {
