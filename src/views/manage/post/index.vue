@@ -150,7 +150,7 @@
     <el-pagination
       style="text-align:center"
       :total="total"
-      :page-sizes="[10, 20, 30]"
+      :page-sizes="[10, 20, 30, 1000]"
       layout="total, sizes, prev, pager, next, jumper"
       :page-size="pageSize"
       :current-page="currentPage"
