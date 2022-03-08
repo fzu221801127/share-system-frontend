@@ -426,10 +426,10 @@ export default {
       this.$refs.multipleTable.clearFilter()
     },
     formatter(row, column) {
-      return row.address
+      return row.content
     },
     filterTag(value, row) {
-      return row.tag === value
+      return row.type === value
     },
     filterHandler(value, row, column) {
       const property = column['property']
