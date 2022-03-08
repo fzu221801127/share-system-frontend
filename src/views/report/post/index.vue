@@ -15,13 +15,15 @@
         v-model="input"
         placeholder="请输入内容"
         style="width:500px;margin-left:1%;margin-right:1%"
-        @keyup.enter.native="searchStudentByName"
+        clearable
+        @keyup.enter.native="searchPostByTitle"
       />
-      <el-button type="primary" @click="searchStudentByName">查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="searchPostByTitle">搜索</el-button>
     </div>
     <hr>
     <div>
-      <el-button type="danger" @click="deleteStudentBySelected">删除</el-button>
+      <el-button type="danger" @click="deletePostBySelected">删除</el-button>
+      <el-button type="primary" @click="deletePostBySelected">恢复</el-button>
       <el-button @click="clearFilter">清除所有过滤器</el-button>
     </div>
     <hr>
@@ -34,36 +36,48 @@
       @selection-change="handleSelectionChange"
     >
       <!--最左边尖括号展开-->
-      <el-table-column type="expand">
+      <el-table-column type="expand" width="25px">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="id">
+              <span>{{ props.row.id }}</span>
+            </el-form-item>
             <el-form-item label="标题">
               <span>{{ props.row.title }}</span>
             </el-form-item>
             <el-form-item label="类型">
-              <span>{{ props.row.tag }}</span>
+              <span>{{ props.row.type }}</span>
             </el-form-item>
             <el-form-item label="发布日期">
-              <span>{{ props.row.date }}</span>
+              <span>{{ props.row.releasetime }}</span>
             </el-form-item>
             <el-form-item label="点击量">
-              <span>{{ props.row.clicks }}</span>
+              <span>{{ props.row.click }}</span>
             </el-form-item>
-            <el-form-item label="详情">
+            <el-form-item label="跳转到详情">
               <el-link
                 :underline="false"
                 class="is-size-6"
                 @click="detailById(props.row.id)"
               >
-                {{ Substr(props.row.title, 0, 200) }}
+                {{ Substr(props.row.title, 0, 300) }}
               </el-link>
+            </el-form-item>
+            <el-form-item label="内容" style="width:100%">
+              <span>{{ props.row.content }}</span>
             </el-form-item>
           </el-form>
         </template>
       </el-table-column>
       <el-table-column
         type="selection"
-        width="55"
+      />
+      <el-table-column
+        prop="id"
+        label="id"
+        width="80px"
+        column-key="id"
+        align="center"
       />
       <el-table-column
         prop="title"
@@ -81,20 +95,20 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="content"
         label="内容预览"
         :formatter="formatter"
       >
         <template slot-scope="props">
           <span>
-            {{ Substr(props.row.address, 0, 200) }}
+            {{ Substr(props.row.content, 0, 200) }}
           </span>
         </template>
       </el-table-column>
       <el-table-column
-        prop="tag"
+        prop="type"
         label="类型"
-        width="100px"
+        width="100"
         :filters="[{ text: '官方资源', value: '官方资源' }, { text: '个人资源', value: '个人资源' }]"
         :filter-method="filterTag"
         filter-placement="bottom-end"
@@ -102,33 +116,25 @@
       >
         <template slot-scope="scope">
           <el-tag
-            :type="scope.row.tag === '官方资源' ? 'primary' : 'success'"
+            :type="scope.row.type === '官方资源' ? 'primary' : 'success'"
             disable-transitions
-          >{{ scope.row.tag }}</el-tag>
+          >{{ scope.row.type }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="releasetime"
         label="发布日期"
         sortable
         width="100px"
-        column-key="date"
+        column-key="releasetime"
         align="center"
       />
       <el-table-column
-        prop="clicks"
+        prop="click"
         label="点击量"
         sortable
-        width="100px"
-        column-key="clicks"
-        align="center"
-      />
-      <el-table-column
-        prop="state"
-        label="状态"
-        sortable
-        width="100px"
-        column-key="clicks"
+        width="90px"
+        column-key="click"
         align="center"
       />
       <el-table-column
@@ -147,6 +153,7 @@
 </template>
 
 <script>
+import { searchPostByTitle, deletePostById, getPostPageList } from '@/api/post'
 
 export default {
   components: {
@@ -229,6 +236,91 @@ export default {
     // eslint-disable-next-line no-undef
   },
   methods: {
+    fetchData() {
+      console.log('加载表格')
+      this.listLoading = true
+      getPostPageList(this.currentPage, this.pagesize).then(response => {
+        this.list = response.page.list
+        this.total = response.page.total
+        this.listLoading = false
+        console.log(response)
+      })
+    },
+    deletePostById(id) {
+      console.log('要删除的Id如下' + id)
+      this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePostById(id).then(response => {
+          console.log('Id如下:' + id)
+          console.log(response)
+          if (response) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }
+          setTimeout(function() {
+            location.reload()
+          }, 500)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    deletePostBySelected() {
+      console.log('选中项')
+      const _selectData = this.$refs.multipleTable.selection
+      console.log(_selectData)
+      const idSet = []
+      for (const date of _selectData) {
+        idSet.push(date.id)
+      }
+      this.$confirm('此操作将永久删除这' + idSet.length + '条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        idSet.forEach(element => {
+          deletePostById(element).then(response => {
+            if (response) {
+              console.log('删除一条数据')
+            }
+          })
+        })
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+        setTimeout(function() {
+          location.reload()
+        }, 500)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    searchPostByTitle() {
+      this.listLoading = true
+      if (!this.input) {
+        this.fetchData()
+      } else {
+        searchPostByTitle(this.input).then(response => {
+          console.log('搜索输入框内容为:' + this.input)
+          this.list = response
+          this.currentPage = 1
+          this.total = 10
+          this.listLoading = false
+        })
+      }
+    },
     detailById(id) {
       console.log(id)
       const routeData = this.$router.resolve({
@@ -238,6 +330,7 @@ export default {
       window.open(routeData.href, '_blank')
     },
     Substr(str, start, n) {
+      if (str == null) return null
       // eslint-disable-line
       if (str.replace(/[\u4e00-\u9fa5]/g, '**').length <= n) {
         return str
@@ -275,14 +368,6 @@ export default {
     filterHandler(value, row, column) {
       const property = column['property']
       return row[property] === value
-    },
-    fetchData() {
-      console.log('加载表格')
-      // this.listLoading = true
-      // getStudentList().then(response => {
-      //   this.list = response
-      this.listLoading = false
-      // })
     },
     /*
      *@description:插入学生

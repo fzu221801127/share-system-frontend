@@ -113,7 +113,7 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import CreateComment from '@/components/Comment/CreateComment'
 import Comments from '@/components/Comment/Comments'
-import { getPostById } from '@/api/post'
+import { getPostById, tipOffPost } from '@/api/post'
 
 export default {
   name: 'Detail',
@@ -208,15 +208,18 @@ export default {
      *@version: V1.0.0
      */
     tipOff() {
-      // tipOffBlog(this.getRequest().key).then((response) => {
-      //   const { data } = response
-      //   if (data.code == '200') {
-      //     this.$message({
-      //       message: '举报成功！',
-      //       type: 'success'
-      //     })
-      //   }
-      // })
+      var post = {
+        id: this.getRequest().key
+      }
+      tipOffPost(post).then((response) => {
+        console.log('tipOffState' + response)
+        if (response === true) {
+          this.$message({
+            message: '举报成功！',
+            type: 'success'
+          })
+        }
+      })
     },
     /**
      *@functionName:  getBlogDetails
