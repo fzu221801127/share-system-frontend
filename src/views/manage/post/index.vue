@@ -321,7 +321,7 @@ export default {
       }, 500)
     },
     /*
-     *@description:通过id删除学生
+     *@description:通过id删除资源
      *@author: zhuangweilong
      *@date: 2021-08-21 10:28:11
      *@version: V1.0.0
@@ -354,7 +354,7 @@ export default {
       })
     },
     /*
-     *@description:通过idSet批量删除选中学生
+     *@description:通过idSet批量删除选中资源
      *@author: zhuangweilong
      *@date: 2021-08-21 10:26:37
      *@version: V1.0.0
@@ -394,7 +394,7 @@ export default {
       })
     },
     /*
-     *@description:更新学生
+     *@description:更新资源
      *@author: zhuangweilong
      *@date: 2021-08-21 10:27:39
      *@version: V1.0.0
@@ -407,7 +407,7 @@ export default {
       //   birthday: this.form.birthday
       // }
       // updateStudent(student).then(response => {
-      //   console.log('更新该学生使用的数据如下:' + student)
+      //   console.log('更新该资源使用的数据如下:' + student)
       //   if (response) {
       //     this.$message({
       //       type: 'success',
@@ -420,7 +420,7 @@ export default {
       }, 500)
     },
     /*
-     *@description:通过名字搜索并返回对应学生列表
+     *@description:通过名字搜索并返回对应资源列表
      *@author: zhuangweilong
      *@date: 2021-08-21 10:25:27
      *@version: V1.0.0

@@ -23,7 +23,7 @@
     <hr>
     <div>
       <el-button type="danger" @click="deletePostBySelected">删除</el-button>
-      <el-button type="primary" @click="deletePostBySelected">恢复</el-button>
+      <el-button type="primary" @click="reinstatePostBySelected">恢复</el-button>
       <el-button @click="clearFilter">清除所有过滤器</el-button>
     </div>
     <hr>
@@ -144,8 +144,8 @@
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <el-button type="text" @click="deleteStudentById(scope.row.id)">删除</el-button>
-          <el-button type="text" @click="deleteStudentById(scope.row.id)">恢复</el-button>
+          <el-button type="text" @click="deletePostById(scope.row.id)">删除</el-button>
+          <el-button type="text" @click="reinstatePostById(scope.row.id)">恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { searchPostByTitle, deletePostById, getPostPageList } from '@/api/post'
+import { searchPostByTitle, deletePostById, getPostTakeDownList, reinstatePostById } from '@/api/post'
 
 export default {
   components: {
@@ -239,9 +239,8 @@ export default {
     fetchData() {
       console.log('加载表格')
       this.listLoading = true
-      getPostPageList(this.currentPage, this.pagesize).then(response => {
-        this.list = response.page.list
-        this.total = response.page.total
+      getPostTakeDownList().then(response => {
+        this.list = response
         this.listLoading = false
         console.log(response)
       })
@@ -307,6 +306,75 @@ export default {
         })
       })
     },
+    reinstatePostById(id) {
+      console.log('要恢复的资源Id如下' + id)
+      this.$confirm('此操作将恢复并上架该资源, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var post = {
+          id: id,
+          state: '未被举报'
+        }
+        reinstatePostById(post).then(response => {
+          console.log('Id如下:' + id)
+          console.log(response)
+          if (response) {
+            this.$message({
+              type: 'success',
+              message: '恢复成功!'
+            })
+          }
+          setTimeout(function() {
+            location.reload()
+          }, 500)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    reinstatePostBySelected() {
+      console.log('选中项')
+      const _selectData = this.$refs.multipleTable.selection
+      console.log(_selectData)
+      const idSet = []
+      for (const date of _selectData) {
+        idSet.push(date.id)
+      }
+      this.$confirm('此操作将恢复并上架这' + idSet.length + '条资源, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        idSet.forEach(element => {
+          var post = {
+            id: element,
+            state: '未被举报'
+          }
+          reinstatePostById(post).then(response => {
+            if (response) {
+              console.log('恢复并上架一条资源')
+            }
+          })
+        })
+        this.$message({
+          type: 'success',
+          message: '恢复并上架成功!'
+        })
+        setTimeout(function() {
+          location.reload()
+        }, 500)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        })
+      })
+    },
     searchPostByTitle() {
       this.listLoading = true
       if (!this.input) {
@@ -315,8 +383,6 @@ export default {
         searchPostByTitle(this.input).then(response => {
           console.log('搜索输入框内容为:' + this.input)
           this.list = response
-          this.currentPage = 1
-          this.total = 10
           this.listLoading = false
         })
       }

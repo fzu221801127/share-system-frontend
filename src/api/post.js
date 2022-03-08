@@ -29,6 +29,20 @@ export function tipOffPost(data) {
 }
 
 /*
+ *@description:恢复被下架的资源
+ *@author: zhuangweilong
+ *@date:
+ *@version: V1.0.0
+*/
+export function reinstatePostById(data) {
+  return request({
+    url: '/posts/id',
+    method: 'put',
+    data
+  })
+}
+
+/*
  *@description:获取资源列表
  *@author: zhuangweilong
  *@date:
@@ -39,6 +53,20 @@ export function getPostPageList(currentPage, pagesize) {
     url: '/posts',
     method: 'get',
     params: { currentPage, pagesize }
+  })
+}
+
+/*
+ *@description:获取下架的资源列表
+ *@author: zhuangweilong
+ *@date:
+ *@version: V1.0.0
+*/
+export function getPostTakeDownList(date) {
+  return request({
+    url: '/posts/takedown',
+    method: 'get',
+    date
   })
 }
 
