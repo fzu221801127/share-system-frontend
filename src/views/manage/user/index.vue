@@ -27,10 +27,10 @@
             <el-input v-model="form.id" autocomplete="off" />
           </el-form-item>
           <el-form-item label="昵称" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off" />
+            <el-input v-model="form.nickname" autocomplete="off" />
           </el-form-item>
           <el-form-item label="手机号" :label-width="formLabelWidth">
-            <el-input v-model="form.phone" autocomplete="off" />
+            <el-input v-model="form.phonenumber" autocomplete="off" />
           </el-form-item>
           <el-form-item label="签名" :label-width="formLabelWidth">
             <el-input v-model="form.signature" autocomplete="off" />
@@ -40,7 +40,7 @@
           </el-form-item>
         </el-form>
       </mydialog>
-      <el-button type="danger" @click="deleteStudentBySelected">删除</el-button>
+      <el-button type="danger" @click="deleteUserBySelected">删除</el-button>
     </div>
     <hr>
     <el-table
@@ -61,12 +61,12 @@
         width="120"
       />
       <el-table-column
-        prop="name"
+        prop="nickname"
         label="昵称"
-        width="120"
+        width=""
       />
       <el-table-column
-        prop="phone"
+        prop="phoneNumber"
         label="手机号"
         show-overflow-tooltip
       />
@@ -86,7 +86,7 @@
         show-overflow-tooltip
       >
         <template slot-scope="scope">
-          <el-button type="text" @click="deleteStudentById(scope.row.id)">删除</el-button>
+          <el-button type="text" @click="deleteUserById(scope.row.id)">删除</el-button>
           <div style="display:inline;margin-left:3%">
             <mydialog
               style="display:inline;margin-right:1%"
@@ -96,13 +96,13 @@
             >
               <el-form :model="form">
                 <el-form-item label="账号" :label-width="formLabelWidth">
-                  <el-input v-model="form.id" autocomplete="off" />
+                  <el-input v-model="form.id" autocomplete="off" :disabled="true" />
                 </el-form-item>
                 <el-form-item label="昵称" :label-width="formLabelWidth">
-                  <el-input v-model="form.name" autocomplete="off" />
+                  <el-input v-model="form.nickname" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth">
-                  <el-input v-model="form.phone" autocomplete="off" />
+                  <el-input v-model="form.phonenumber" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="签名" :label-width="formLabelWidth">
                   <el-input v-model="form.signature" autocomplete="off" />
@@ -120,6 +120,7 @@
 </template>
 
 <script>
+import { getUserList, deleteUserById } from '@/api/usermanage'
 import Mydialog from '@/components/Mydialog'
 export default {
   components: {
@@ -128,44 +129,13 @@ export default {
   filters: {},
   data() {
     return {
-      list: [
-        { id: 'abc123',
-          name: '郑龙嗨',
-          phone: '18955551234',
-          birthday: '2000-02-03',
-          signature: '这是一条签名' },
-        { id: 'abc111',
-          name: '啊啊啊法撒旦发发士大夫撒旦发士大夫士大夫',
-          phone: '18955551211',
-          birthday: '2000-02-03',
-          signature: '刮痧跟' },
-        { id: 'abc222',
-          name: '水水水',
-          phone: '18955551222',
-          birthday: '2000-02-03',
-          signature: '感受到的是' },
-        { id: 'abc',
-          name: '事实上',
-          phone: '18955551233',
-          birthday: '',
-          signature: '下次发顺丰的' },
-        { id: '123',
-          name: '在这种',
-          phone: '18955551244',
-          birthday: '2000-02-03',
-          signature: '故事大纲' },
-        { id: 'admin',
-          name: '胜多负',
-          phone: '18955551255',
-          birthday: '2000-02-03',
-          signature: '真不法撒旦飞洒地方士大夫士大夫士大夫是错' }
-      ],
+      list: null,
       listLoading: true,
       input: '',
       multipleSelection: [],
       form: {
         id: '',
-        name: '',
+        nickname: '',
         phone: '',
         birthday: '',
         signature: ''
@@ -180,11 +150,13 @@ export default {
   methods: {
     fetchData() {
       console.log('加载表格')
-      // this.listLoading = true
-      // getStudentList().then(response => {
-      //   this.list = response
-      this.listLoading = false
-      // })
+      this.listLoading = true
+      getUserList().then(response => {
+        this.list = response
+        console.log(response)
+        console.log(this.list)
+        this.listLoading = false
+      })
     },
     /*
      *@description:插入学生
@@ -207,37 +179,37 @@ export default {
       }, 500)
     },
     /*
-     *@description:通过id删除学生
+     *@description:通过id删除用户
      *@author: zhuangweilong
-     *@date: 2021-08-21 10:28:11
+     *@date:
      *@version: V1.0.0
     */
-    deleteStudentById(id) {
+    deleteUserById(id) {
       console.log('要删除的Id如下' + id)
-      // this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      //   deleteStudentById(id).then(response => {
-      //     console.log('Id如下:' + id)
-      //     console.log(response)
-      //     if (response) {
-      //       this.$message({
-      //         type: 'success',
-      //         message: '删除成功!'
-      //       })
-      //     }
-      //     setTimeout(function() {
-      //       location.reload()
-      //     }, 500)
-      //   })
-      // }).catch(() => {
-      //   this.$message({
-      //     type: 'info',
-      //     message: '已取消删除'
-      //   })
-      // })
+      this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUserById(id).then(response => {
+          console.log('Id如下:' + id)
+          console.log(response)
+          if (response) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }
+          setTimeout(function() {
+            location.reload()
+          }, 500)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     /*
      *@description:通过idSet批量删除选中学生
@@ -245,7 +217,7 @@ export default {
      *@date: 2021-08-21 10:26:37
      *@version: V1.0.0
     */
-    deleteStudentBySelected() {
+    deleteUserBySelected() {
       console.log('选中项')
       const _selectData = this.$refs.multipleTable.selection
       console.log(_selectData)
@@ -259,11 +231,11 @@ export default {
         type: 'warning'
       }).then(() => {
         idSet.forEach(element => {
-          // deleteStudentById(element).then(response => {
-          //   if (response) {
-          //     console.log('删除一条数据')
-          //   }
-          // })
+          deleteUserById(element).then(response => {
+            if (response) {
+              console.log('删除一条数据')
+            }
+          })
         })
         this.$message({
           type: 'success',

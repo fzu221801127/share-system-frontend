@@ -141,6 +141,8 @@ export default {
       this.listLoading = true
       getStudentList().then(response => {
         this.list = response
+        console.log(response)
+        console.log(this.list)
         this.listLoading = false
       })
     },
