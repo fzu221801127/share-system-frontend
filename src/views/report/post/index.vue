@@ -261,9 +261,7 @@ export default {
               message: '删除成功!'
             })
           }
-          setTimeout(function() {
-            location.reload()
-          }, 500)
+          this.fetchData()
         })
       }).catch(() => {
         this.$message({
@@ -326,9 +324,7 @@ export default {
               message: '恢复成功!'
             })
           }
-          setTimeout(function() {
-            location.reload()
-          }, 500)
+          this.fetchData()
         })
       }).catch(() => {
         this.$message({

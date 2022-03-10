@@ -375,7 +375,9 @@ export default {
             if (response) {
               console.log('删除一条数据')
             }
-            this.fetchData()
+            setTimeout(function() {
+              location.reload()
+            }, 500)
           })
         })
         this.$message({
