@@ -342,9 +342,7 @@ export default {
               message: '删除成功!'
             })
           }
-          setTimeout(function() {
-            location.reload()
-          }, 500)
+          this.fetchData()
         })
       }).catch(() => {
         this.$message({
@@ -377,15 +375,13 @@ export default {
             if (response) {
               console.log('删除一条数据')
             }
+            this.fetchData()
           })
         })
         this.$message({
           type: 'success',
           message: '删除成功!'
         })
-        setTimeout(function() {
-          location.reload()
-        }, 500)
       }).catch(() => {
         this.$message({
           type: 'info',
