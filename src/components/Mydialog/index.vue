@@ -1,23 +1,18 @@
+<!--
+ * @description:
+ * @fileName: index.vue
+ * @author: zhuangweilong
+ * @date: 2021-09-03 16:56:10
+ * @后台人员:
+ * @path:
+ * @version: V1.0.0
+!-->
 <template>
   <div>
-    <!-- Form -->
-    <el-button :type="buttonType" @click="dialogFormVisible = true">{{ buttonName }}</el-button>
-
-    <el-dialog title="学生信息" :visible.sync="dialogFormVisible">
-      <!-- <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off">4</el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai">5</el-option>
-            <el-option label="区域二" value="beijing">6</el-option>
-          </el-select>
-        </el-form-item> -->
-      <!-- </el-form> -->
+    <el-dialog :title="title" :visible.sync="dialogVisible" :before-close="cancel" :close-on-click-modal="false">
       <slot />
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </div>
     </el-dialog>
@@ -34,22 +29,23 @@ export default {
     buttonType: {
       type: String,
       default: 'primary'
+    },
+    title: {
+      type: String,
+      default: '对话框'
+    },
+    dialogVisible: {
+      type: Boolean
     }
   },
   data() {
     return {
-      // form: {
-      //   name: '',
-      //   region: '',
-      //   date1: '',
-      //   date2: '',
-      //   delivery: false,
-      //   type: [],
-      //   resource: '',
-      //   desc: ''
-      // },
-      // formLabelWidth: '120px',
-      dialogFormVisible: false
+      visible: false
+    }
+  },
+  watch: {
+    dialogVisible(val) {
+      this.visible = val
     }
   },
   created() {
@@ -57,8 +53,10 @@ export default {
   },
   methods: {
     submit() {
-      this.dialogFormVisible = false
       this.$emit('clicksubmit')
+    },
+    cancel() {
+      this.$emit('clickcancel')
     }
   }
 }

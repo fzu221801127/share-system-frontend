@@ -69,3 +69,31 @@ export function searchUserByName(name) {
     params: { name }
   })
 }
+
+/*
+ *@description:根据id查询用户，并返回查询到的用户
+ *@author: 庄威龙
+ *@date:
+ *@version: V1.0.0
+*/
+export function getUserById(id) {
+  return request({
+    url: '/users/id',
+    method: 'get',
+    params: { id }
+  })
+}
+
+/*
+ *@description:根据id模糊查询用户，并返回查询到的用户列表
+ *@author: 庄威龙
+ *@date:
+ *@version: V1.0.0
+*/
+export function searchUserById(id) {
+  return request({
+    url: '/users/idshearch',
+    method: 'get',
+    params: { id }
+  })
+}

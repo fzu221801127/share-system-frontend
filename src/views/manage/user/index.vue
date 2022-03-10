@@ -10,33 +10,37 @@
 <template>
   <div class="app-container">
     <div>
-      <span>昵称</span>
+      <span>账号</span>
       <el-input
         v-model="input"
-        placeholder="请输入内容"
+        placeholder="根据账号模糊搜索"
         style="width:500px;margin-left:1%;margin-right:1%"
-        @keyup.enter.native="searchStudentByName"
+        @keyup.enter.native="searchUserById"
       />
-      <el-button type="primary" @click="searchStudentByName">查询</el-button>
+      <el-button type="primary" @click="searchUserById">查询</el-button>
     </div>
     <hr>
     <div>
-      <mydialog style="display:inline;margin-right:1%" button-name="增加" @clicksubmit="insertStudent">
-        <el-form :model="form">
-          <el-form-item label="账号" :label-width="formLabelWidth">
+      <el-button type="primary" @click="openInsertForm">增加</el-button>
+      <mydialog
+        :dialog-visible="insertFormVisible"
+        title="增加用户"
+        style="display:inline;margin-right:1%"
+        @clicksubmit="insertUser"
+        @clickcancel="clickcancel"
+      >
+        <el-form ref="insertForm" :model="form" :rules="formRules">
+          <el-form-item label="账号" :label-width="formLabelWidth" prop="id">
             <el-input v-model="form.id" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="昵称" :label-width="formLabelWidth">
+          <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+            <el-input v-model="form.password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="昵称" :label-width="formLabelWidth" prop="nickname">
             <el-input v-model="form.nickname" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="手机号" :label-width="formLabelWidth">
-            <el-input v-model="form.phonenumber" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="签名" :label-width="formLabelWidth">
-            <el-input v-model="form.signature" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="生日" :label-width="formLabelWidth">
-            <el-input v-model="form.birthday" autocomplete="off" />
+          <el-form-item label="手机号" :label-width="formLabelWidth" prop="phoneNumber">
+            <el-input v-model="form.phoneNumber" autocomplete="off" />
           </el-form-item>
         </el-form>
       </mydialog>
@@ -88,27 +92,30 @@
         <template slot-scope="scope">
           <el-button type="text" @click="deleteUserById(scope.row.id)">删除</el-button>
           <div style="display:inline;margin-left:3%">
+            <el-button
+              type="text"
+              @click="openUpdateForm(scope.row.id,scope.row.password,scope.row.nickname,scope.row.phoneNumber)"
+            >
+              编辑</el-button>
             <mydialog
               style="display:inline;margin-right:1%"
-              button-name="编辑"
-              button-type="text"
-              @clicksubmit="updateStudent(scope.row.id)"
+              title="编辑用户"
+              :dialog-visible="updateFormVisible"
+              @clickcancel="clickcancel"
+              @clicksubmit="updateUser()"
             >
-              <el-form :model="form">
+              <el-form ref="updateForm" :model="form2" :rules="formRules">
                 <el-form-item label="账号" :label-width="formLabelWidth">
-                  <el-input v-model="form.id" autocomplete="off" :disabled="true" />
+                  <el-input v-model="form2.id" autocomplete="off" :disabled="true" />
+                </el-form-item>
+                <el-form-item label="密码" :label-width="formLabelWidth">
+                  <el-input v-model="form2.password" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="昵称" :label-width="formLabelWidth">
-                  <el-input v-model="form.nickname" autocomplete="off" />
+                  <el-input v-model="form2.nickname" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="手机号" :label-width="formLabelWidth">
-                  <el-input v-model="form.phonenumber" autocomplete="off" />
-                </el-form-item>
-                <el-form-item label="签名" :label-width="formLabelWidth">
-                  <el-input v-model="form.signature" autocomplete="off" />
-                </el-form-item>
-                <el-form-item label="生日" :label-width="formLabelWidth">
-                  <el-input v-model="form.birthday" autocomplete="off" />
+                  <el-input v-model="form2.phoneNumber" autocomplete="off" />
                 </el-form-item>
               </el-form>
             </mydialog>
@@ -120,7 +127,7 @@
 </template>
 
 <script>
-import { getUserList, deleteUserById } from '@/api/usermanage'
+import { getUserList, deleteUserById, insertUser, getUserById, updateUser, searchUserById } from '@/api/usermanage'
 import Mydialog from '@/components/Mydialog'
 export default {
   components: {
@@ -129,6 +136,8 @@ export default {
   filters: {},
   data() {
     return {
+      insertFormVisible: false,
+      updateFormVisible: false,
       list: null,
       listLoading: true,
       input: '',
@@ -136,11 +145,26 @@ export default {
       form: {
         id: '',
         nickname: '',
-        phone: '',
-        birthday: '',
-        signature: ''
+        phoneNumber: '',
+        password: ''
       },
-      formLabelWidth: '120px'
+      form2: {
+        id: '',
+        nickname: '',
+        phoneNumber: '',
+        password: ''
+      },
+      formLabelWidth: '120px',
+      formRules: {
+        id: [
+          { required: true, message: '请输入账号', trigger: 'blur' },
+          { min: 0, max: 30, message: '长度在0到30之间', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 0, max: 30, message: '长度在0到30之间', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -159,24 +183,51 @@ export default {
       })
     },
     /*
-     *@description:插入学生
+     *@description:新增用户
      *@author: zhuangweilong
-     *@date: 2021-08-21 10:27:22
+     *@date:
      *@version: V1.0.0
     */
-    insertStudent() {
-      // insertStudent(this.form).then(response => {
-      //   console.log('表单如下:' + this.form)
-      //   if (response) {
-      //     this.$message({
-      //       type: 'success',
-      //       message: '添加成功!'
-      //     })
-      //   }
-      // })
-      setTimeout(function() {
-        location.reload()
-      }, 500)
+    insertUser() {
+      this.$refs['insertForm'].validate((valid) => {
+        if (valid) {
+          getUserById(this.form.id).then(response => {
+            var user = response
+            console.log('user:')
+            console.log(user)
+            if (user.id != null) {
+              this.$message({
+                type: 'error',
+                message: '用户账号已存在!'
+              })
+              this.form.id = ''
+              this.form.nickname = ''
+              this.form.phoneNumber = ''
+              this.form.password = ''
+            } else {
+              insertUser(this.form).then(response => {
+                console.log('表单如下')
+                console.log(this.form)
+                if (response) {
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功!'
+                  })
+                  this.insertFormVisible = false
+                }
+                this.fetchData()
+                this.form.id = ''
+                this.form.nickname = ''
+                this.form.phoneNumber = ''
+                this.form.password = ''
+              })
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     /*
      *@description:通过id删除用户
@@ -199,10 +250,8 @@ export default {
               type: 'success',
               message: '删除成功!'
             })
+            this.fetchData()
           }
-          setTimeout(function() {
-            location.reload()
-          }, 500)
         })
       }).catch(() => {
         this.$message({
@@ -235,15 +284,13 @@ export default {
             if (response) {
               console.log('删除一条数据')
             }
+            this.fetchData()
           })
         })
         this.$message({
           type: 'success',
           message: '删除成功!'
         })
-        setTimeout(function() {
-          location.reload()
-        }, 500)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -257,7 +304,30 @@ export default {
      *@date: 2021-08-21 10:27:39
      *@version: V1.0.0
     */
-    updateStudent(id) {
+    updateUser() {
+      console.log('进入updateUser')
+      this.$refs['updateForm'].validate((valid) => {
+        if (valid) {
+          console.log('更新表单验证通过')
+          updateUser(this.form2).then(response => {
+            if (response) {
+              this.$message({
+                type: 'success',
+                message: '更新成功!'
+              })
+              this.updateFormVisible = false
+            }
+            this.fetchData()
+            this.form2.id = ''
+            this.form2.nickname = ''
+            this.form2.phoneNumber = ''
+            this.form2.password = ''
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
       // var student = {
       //   id: id,
       //   name: this.form.name,
@@ -273,9 +343,9 @@ export default {
       //     })
       //   }
       // })
-      setTimeout(function() {
-        location.reload()
-      }, 500)
+      // setTimeout(function() {
+      //   location.reload()
+      // }, 500)
     },
     /*
      *@description:通过名字搜索并返回对应学生列表
@@ -283,20 +353,34 @@ export default {
      *@date: 2021-08-21 10:25:27
      *@version: V1.0.0
     */
-    searchStudentByName() {
+    searchUserById() {
       this.listLoading = true
       if (!this.input) {
         this.fetchData()
       } else {
-        // searchStudentByName(this.input).then(response => {
-        //   console.log('搜索输入框内容为:' + this.input)
-        //   this.list = response
-        //   this.listLoading = false
-        // })
+        searchUserById(this.input).then(response => {
+          console.log('搜索输入框内容为:' + this.input)
+          this.list = response
+          this.listLoading = false
+        })
       }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    clickcancel() {
+      this.updateFormVisible = false
+      this.insertFormVisible = false
+    },
+    openInsertForm() {
+      this.insertFormVisible = true
+    },
+    openUpdateForm(id, password, nickname, phoneNumber) {
+      this.form2.id = id
+      this.form2.password = password
+      this.form2.nickname = nickname
+      this.form2.phoneNumber = phoneNumber
+      this.updateFormVisible = true
     }
   }
 }
