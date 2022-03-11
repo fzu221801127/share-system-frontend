@@ -56,18 +56,19 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+// import { validUsername } from '@/utils/validate'
+import { login } from '@/api/admin'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   if (value.length < 3) {
+    //     callback(new Error('The password can not be less than 3 digits'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('The password can not be less than 6 digits'))
@@ -78,10 +79,10 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{ required: true, trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
@@ -114,9 +115,34 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
+          // this.$store.dispatch('user/login', this.loginForm).then(() => {
+          //   this.$router.push({ path: this.redirect || '/' })
+          //   this.loading = false
+          // })
+          var user = {
+            id: this.loginForm.username,
+            password: this.loginForm.password
+          }
+          login(user).then(response => {
+            var message = response.message
+            console.log('message!!!')
+            console.log(message)
+            if (message === 'Success') {
+              var parameter = {
+                username: 'admin',
+                password: '123456'
+              }
+              this.$store.dispatch('user/login', parameter).then(() => {
+                this.$router.push({ path: this.redirect || '/' })
+                this.loading = false
+              })
+            } else {
+              this.$message({
+                type: 'info',
+                message: message
+              })
+              this.loading = false
+            }
           }).catch(() => {
             this.loading = false
           })
@@ -134,7 +160,7 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
+$bg:#000000;
 $light_gray:#fff;
 $cursor: #fff;
 

@@ -122,6 +122,21 @@
 // import { reactive } from 'vue'
 export default {
   name: 'Echarts',
+  data() {
+    return {
+      name: '谷雨',
+      role: 'admin',
+      todoList: [
+        {
+          status: '状态1',
+          title: '标题1'
+        }, {
+          status: '状态2',
+          title: '标题2'
+        }
+      ]
+    }
+  },
   mounted() {
     this.myEcharts()
   },
