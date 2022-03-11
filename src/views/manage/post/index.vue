@@ -236,6 +236,9 @@ export default {
     }
   },
   created() {
+    var userinfo = this.$session.get('userinfo')
+    console.log('post userinfo:')
+    console.log(userinfo)
     this.fetchData()
     // eslint-disable-next-line no-undef
   },

@@ -78,7 +78,7 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        username: '',
         password: ''
       },
       loginRules: {
@@ -125,9 +125,14 @@ export default {
           }
           login(user).then(response => {
             var message = response.message
-            console.log('message!!!')
-            console.log(message)
+            console.log('message:' + message)
             if (message === 'Success') {
+              // console.log('response:')
+              // console.log(response)
+              this.$session.set('userinfo', response)
+              var userinfo = this.$session.get('userinfo')
+              console.log('userinfo:')
+              console.log(userinfo)
               var parameter = {
                 username: 'admin',
                 password: '123456'
