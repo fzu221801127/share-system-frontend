@@ -134,7 +134,7 @@ export const constantRoutes = [
       {
         // path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
         path: 'https://github.com/fzu221801127/share-system-frontend',
-        meta: { title: 'External Link', icon: 'link' }
+        meta: { title: '项目存储库', icon: 'link' }
       }
     ]
   },
