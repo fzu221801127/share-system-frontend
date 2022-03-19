@@ -157,6 +157,11 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <div style="text-align:center">
+      <span style="color:red">
+        本站所有资源来源于网友交流,只供网络测试、请在24小时内删除所下内容
+      </span>
+    </div>
   </div>
 </template>
 
