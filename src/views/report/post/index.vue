@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { searchPostByTitle, deletePostById, getPostTakeDownList, reinstatePostById } from '@/api/post'
+import { searchTakedownPostByTitle, deletePostById, getPostTakeDownList, reinstatePostById } from '@/api/post'
 
 export default {
   components: {
@@ -376,7 +376,7 @@ export default {
       if (!this.input) {
         this.fetchData()
       } else {
-        searchPostByTitle(this.input).then(response => {
+        searchTakedownPostByTitle(this.input).then(response => {
           console.log('搜索输入框内容为:' + this.input)
           this.list = response
           this.listLoading = false

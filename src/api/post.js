@@ -85,6 +85,20 @@ export function searchPostByTitle(title) {
 }
 
 /*
+ *@description:根据标题模糊查询暂时下架资源，并返回查询到的资源列表
+ *@author: 庄威龙
+ *@date:
+ *@version: V1.0.0
+*/
+export function searchTakedownPostByTitle(title) {
+  return request({
+    url: '/posts/takedown/title',
+    method: 'get',
+    params: { title }
+  })
+}
+
+/*
  *@description:根据id查询资源，并返回查询到的资源
  *@author: 庄威龙
  *@date:
