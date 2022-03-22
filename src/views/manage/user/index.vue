@@ -229,12 +229,6 @@ export default {
         }
       })
     },
-    /*
-     *@description:通过id删除用户
-     *@author: zhuangweilong
-     *@date:
-     *@version: V1.0.0
-    */
     deleteUserById(id) {
       console.log('要删除的Id如下' + id)
       this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
@@ -260,12 +254,6 @@ export default {
         })
       })
     },
-    /*
-     *@description:通过idSet批量删除选中学生
-     *@author: zhuangweilong
-     *@date: 2021-08-21 10:26:37
-     *@version: V1.0.0
-    */
     deleteUserBySelected() {
       console.log('选中项')
       const _selectData = this.$refs.multipleTable.selection
@@ -298,12 +286,6 @@ export default {
         })
       })
     },
-    /*
-     *@description:更新学生
-     *@author: zhuangweilong
-     *@date: 2021-08-21 10:27:39
-     *@version: V1.0.0
-    */
     updateUser() {
       console.log('进入updateUser')
       this.$refs['updateForm'].validate((valid) => {
@@ -328,31 +310,7 @@ export default {
           return false
         }
       })
-      // var student = {
-      //   id: id,
-      //   name: this.form.name,
-      //   sex: this.form.sex,
-      //   birthday: this.form.birthday
-      // }
-      // updateStudent(student).then(response => {
-      //   console.log('更新该学生使用的数据如下:' + student)
-      //   if (response) {
-      //     this.$message({
-      //       type: 'success',
-      //       message: '更新成功!'
-      //     })
-      //   }
-      // })
-      // setTimeout(function() {
-      //   location.reload()
-      // }, 500)
     },
-    /*
-     *@description:通过名字搜索并返回对应学生列表
-     *@author: zhuangweilong
-     *@date: 2021-08-21 10:25:27
-     *@version: V1.0.0
-    */
     searchUserById() {
       this.listLoading = true
       if (!this.input) {

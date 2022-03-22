@@ -170,37 +170,6 @@ export default {
       // })
     },
     /**
-     *@functionName:  thumb
-     *@description: 点赞
-     *@author: 庄威龙
-     *@date:
-     *@version: V1.0.0
-     */
-    thumb() {
-      // const params = {
-      //   blogId: this.getRequest().key,
-      //   flag: this.canthumb
-      // }
-      // thumbBlog(params).then((response) => {
-      //   const { data } = response
-      //   if (data.code == '200' && this.canthumb === true) {
-      //     this.$message({
-      //       message: '点赞成功！',
-      //       type: 'success'
-      //     })
-      //     this.canthumb = false
-      //     this.thumbname = '已点赞'
-      //   } else if (data.code == '200' && this.canthumb === false) {
-      //     this.$message({
-      //       message: '取消点赞成功！',
-      //       type: 'success'
-      //     })
-      //     this.canthumb = true
-      //     this.thumbname = '点赞'
-      //   }
-      // })
-    },
-    /**
      *@functionName:  tipOff
      *@description: 举报
      *@author: 庄威龙
@@ -223,7 +192,7 @@ export default {
     },
     /**
      *@functionName:  getBlogDetails
-     *@description: 获取文章详细信息   !!接口还没换 !!数据还是写死 需要到时候父子传参调整
+     *@description: 获取文章详细信息
      *@author: 庄威龙
      *@date:
      *@version: V1.0.0
