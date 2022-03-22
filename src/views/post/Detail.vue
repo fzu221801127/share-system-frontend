@@ -76,13 +76,13 @@
                   @click="thumb()"
                 >{{ thumbname }}
                 </el-button> -->
-                <el-button
+                <!-- <el-button
                   type="warning"
                   icon="el-icon-star-off"
                   circle
                   style="float:right"
                   @click="collection()"
-                />
+                /> -->
                 <br>
                 <span style="font-size: 15px;margin-right:10px">{{ blog.releaseTime }}</span>
                 <el-button

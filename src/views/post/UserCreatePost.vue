@@ -2,11 +2,11 @@
  * @description: 资源分享网-用户发布文章
  * @fileName: UserCreatePost.vue
  * @author: 庄威龙
- * @date:2022-01-30 18:26:38
+ * @date:
  * @后台人员:
  * @path:
- * @version: V1.0.2
- * @modified Description: 修改了下拉框的样式
+ * @version: V1.0.0
+ * @modified Description:
 !-->
 <template>
   <div class="columns">
@@ -31,42 +31,6 @@
             <!--Markdown-->
             <div id="vditor" />
 
-            <div class="droplist">
-              <div class="module">
-                <span style="font-size: 22px">板块：</span>
-                <el-select v-model="ruleForm.moduleId" placeholder="请选择">
-                  <el-option-group
-                    v-for="group in modules"
-                    :key="group.label"
-                    :label="group.label"
-                  >
-                    <el-option
-                      v-for="item in group.options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-option-group>
-                </el-select>
-              </div>
-              <div class="tags">
-                <span style="font-size: 22px">Tag：</span>
-                <el-select v-model="ruleForm.tagId" placeholder="请选择">
-                  <el-option-group
-                    v-for="group in tags"
-                    :key="group.label"
-                    :label="group.label"
-                  >
-                    <el-option
-                      v-for="item in group.options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-option-group>
-                </el-select>
-              </div>
-            </div>
             <br>
 
             <div style="padding-top: 20px">
@@ -87,23 +51,19 @@
 </template>
 
 <script>
-// import { postBlog, updateTag, getAllTags, getAllModules } from '@/api/blog'
-// import { getNowTime } from '@/utils/time'
-import store from '@/store'
 import Vditor from 'vditor'
 import 'vditor/dist/index.css'
-
+import { getNowTime } from '@/utils/time'
+import { insertPost } from '@/api/post'
+import { logout, getInfo } from '@/api/user'
 export default {
   name: 'UserCreatePost',
-
   data() {
     return {
       contentEditor: {},
       ruleForm: {
         title: '', // 标题
-        moduleId: [], // 标签
-        content: '', // 内容
-        tagId: [] // 标签
+        content: '' // 内容
       },
       rules: {
         title: [
@@ -115,45 +75,7 @@ export default {
             trigger: 'blur'
           }
         ]
-      },
-      modules: [
-        {
-          label: '模块',
-          options: [
-            {
-              value: '2',
-              label: '经验'
-            },
-            {
-              value: '21',
-              label: '找研友'
-            }
-          ]
-        }
-      ],
-      tags: [
-        {
-          label: '文章标签',
-          options: [
-            {
-              value: '0',
-              label: '福州大学'
-            },
-            {
-              value: '3',
-              label: '外校' // 还未制作
-            },
-            {
-              value: '1',
-              label: '经验'
-            },
-            {
-              value: '2',
-              label: '资讯'
-            }
-          ]
-        }
-      ]
+      }
     }
   },
   mounted() {
@@ -218,10 +140,19 @@ export default {
         }
       ]
     })
-    this.getTags()
-    this.getModules()
   },
-  created() {},
+  created() {
+    if (this.$session.get('userinfo') != null) {
+      var userinfo = this.$session.get('userinfo')
+      console.log(userinfo.id)
+    } else {
+      logout()
+      getInfo().then(res => {
+        console.log('res:')
+        console.log(res)
+      })
+    }
+  },
   methods: {
     /**
      *@functionName:    submitForm
@@ -242,49 +173,40 @@ export default {
             alert('话题内容不可为空')
             return false
           }
-          // if (
-          //   this.ruleForm.moduleId == null ||
-          //   this.ruleForm.moduleId.length === 0
-          // ) {
-          //   alert('标签不可以为空')
-          //   return false
-          // }
           this.ruleForm.content = this.contentEditor.getValue()
           var blog = {
-            author: store.getters.user.name,
-            collectionNumber: '',
+            title: this.ruleForm.title,
             content: this.ruleForm.content,
-            moduleId: this.ruleForm.moduleId,
-            // releaseTime: getNowTime(),
-            title: this.ruleForm.title
+            releasetime: getNowTime(),
+            type: '官方资源',
+            click: 0,
+            userId: this.$session.get('userinfo').id,
+            state: '未被举报',
+            tag: null
           }
           console.log(blog)
-
-          // postBlog(blog).then((response) => {
-          //   const { data } = response
-          //   // console.log(data.data);
-          //   // 展示刚发布的文章详情页  !!先返回首页
-          //   var id = {
-          //     id: data.data
-          //   }
-          //   var tags = [this.ruleForm.tagId]
-          //   updateTag(id, tags).then((response) => {
-          //     console.log('updateTag')
-          //   })
-          //   setTimeout(() => {
-          //     this.$message({
-          //       message: '成功发表',
-          //       type: 'success',
-          //       duration: 1000
-          //     })
-          //     this.detailById(data.data)
-          //   }, 800)
-          // })
+          insertPost(blog).then((response) => {
+            if (response) {
+              setTimeout(() => {
+                this.$message({
+                  message: '成功发表',
+                  type: 'success'
+                })
+              }, 500)
+              this.ruleForm.title = ''
+              this.ruleForm.content = ''
+              this.contentEditor.setValue('')
+            } else {
+              this.$message({
+                message: '发表失败',
+                type: 'error'
+              })
+            }
+          })
         } else {
           this.$message({
             message: '发表失败',
-            type: 'error',
-            duration: 1000
+            type: 'error'
           })
           console.log('error submit!!')
           return false
@@ -294,7 +216,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
       this.contentEditor.setValue('')
-      this.ruleForm.moduleId = ''
     },
     detailById(id) {
       console.log(id)
@@ -303,48 +224,6 @@ export default {
         query: { key: id }
       })
       window.open(routeData.href, '_self')
-    },
-    /**
-     *@functionName: getTags
-     *@description: 获取数据库中的标签
-     *@author: lw
-     *@date: 2021-06-11 16:15:31
-     *@version: V1.0.0
-     */
-    getTags() {
-      console.log(this.tags)
-      // const _this = this
-      // getAllTags().then((response) => {
-      //   var data = response.data.data
-      //   var tags = {}
-      //   // eslint-disable-next-line no-array-constructor
-      //   tags = new Array()
-      //   for (let i = 0; i < data.length; i++) {
-      //     var o = { value: '321', label: '123' }
-      //     o.label = data[i].name
-      //     o.value = data[i].id
-      //     tags.push(o)
-      //   }
-      //   _this.tags[0].options = tags
-      // })
-    },
-
-    getModules() {
-      // const _this = this
-      // getAllModules().then((response) => {
-      //   console.log(response.data)
-      //   var data = response.data.data
-      //   var modules = {}
-      //   // eslint-disable-next-line no-array-constructor
-      //   modules = new Array()
-      //   for (let i = 0; i < data.length; i++) {
-      //     var o = { value: '321', label: '123' }
-      //     o.label = data[i].name
-      //     o.value = data[i].id
-      //     modules.push(o)
-      //   }
-      //   _this.modules[0].options = modules
-      // })
     }
   }
 }

@@ -1,6 +1,20 @@
 import request from '@/utils/request2'
 
 /*
+ *@description:新增资源
+ *@author: zhuangweilong
+ *@date:
+ *@version: V1.0.0
+*/
+export function insertPost(data) {
+  return request({
+    url: '/posts',
+    method: 'post',
+    data
+  })
+}
+
+/*
  *@description:根据id删除资源
  *@author: zhuangweilong
  *@date:
