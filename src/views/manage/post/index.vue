@@ -157,11 +157,11 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    <div style="text-align:center">
+    <!-- <div style="text-align:center">
       <span style="color:red">
         本站所有资源来源于网友交流,只供网络测试、请在24小时内删除所下内容
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -306,27 +306,6 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.fetchData()
-    },
-
-    /*
-     *@description:插入学生
-     *@author: zhuangweilong
-     *@date: 2021-08-21 10:27:22
-     *@version: V1.0.0
-    */
-    insertStudent() {
-      // insertStudent(this.form).then(response => {
-      //   console.log('表单如下:' + this.form)
-      //   if (response) {
-      //     this.$message({
-      //       type: 'success',
-      //       message: '添加成功!'
-      //     })
-      //   }
-      // })
-      setTimeout(function() {
-        location.reload()
-      }, 500)
     },
     /*
      *@description:通过id删除资源
