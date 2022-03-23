@@ -43,7 +43,7 @@
                 text-align: center;
               "
             >
-              {{ comment.author }}
+              {{ comment.userId }}
             </div>
           </div>
         </el-aside>
@@ -59,7 +59,7 @@
                 >点赞</el-button
               > -->
               <br>
-              <span style="font-size: 15px;margin-right:10px">{{ comment.releaseTime }}</span>
+              <span style="font-size: 15px;margin-right:10px">{{ comment.releasetime }}</span>
               <!-- <el-button type="text">举报</el-button> -->
               <br>
               <el-button
@@ -88,7 +88,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-// import { getFirstComments } from '@/api/comment'
+import { getFirstComments } from '@/api/comment'
 import SecondComment from '@/components/Comment/SecondComments'
 import CreateSecondComment from '@/components/Comment/CreateSecondComment'
 
@@ -130,31 +130,12 @@ export default {
       }
     },
     FirstComment: function() {
-      // var params = {
-      //   flag: 0,
-      //   id: this.blogId
-      // }
-      // getFirstComments(params).then((response) => {
-      //   console.log(params.id)
-      //   // const { data } = response
-      //   this.comments = response.data.data
-      //   console.log(this.comments)
-      // })
-      console.log('一级评论获取到的博客id为:' + this.blogId)
-      this.comments = [
-        {
-          id: 1,
-          author: 'zzz',
-          content: '嘎洒还干啥回归到谁goisdhfgiohsioaghigsagsoaighousahgoushaguohasuoghuoshaguishagsdagsijabgksbgiusbauigbuisguisuiaguisguisauigiusaguisauisauihauig79y7oashoui5h32oi15hoih435oih23oi5h1io4h5ioh14o5h打鬼煞鬼十大尴尬ui杀鬼划时代i鬼煞鬼i刷的过 沙蒂固ui撒大噶iusaui公司丢谁啊的归属',
-          releaseTime: '2021-05-11 22:25:00'
-        },
-        {
-          id: 3,
-          author: '公司大',
-          content: '哦i更少个傻瓜公司大规划',
-          releaseTime: '2021-05-11 22:25:21'
-        }
-      ]
+      var postId = parseInt(this.blogId)
+      getFirstComments(postId).then((response) => {
+        // const { data } = response
+        this.comments = response
+        console.log(this.comments)
+      })
     }
   }
 }

@@ -48,7 +48,7 @@
                 position: relative;
               "
             >
-              {{ comment.author }}
+              {{ comment.userId }}
             </div>
           </div>
         </el-aside>
@@ -58,7 +58,7 @@
           </el-main>
           <el-footer>
             <div style="float: right">
-              <span style="font-size: 15px;margin-right:10px">{{ comment.releaseTime }}</span>
+              <span style="font-size: 15px;margin-right:10px">{{ comment.releasetime }}</span>
               <!-- <el-button
                 round
                 style="background-color: #ff4949; color: white; font-size: 3px"
@@ -74,7 +74,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-// import { getSecondComments } from '@/api/comment'
+import { getSecondComments } from '@/api/comment'
 export default {
   name: 'Detail',
   components: {},
@@ -113,16 +113,11 @@ export default {
   },
   methods: {
     SecondComment: function() {
-      // var params = {
-      //   flag: 1,
-      //   id: this.firstCommentId
-      // }
-      // getSecondComments(params).then((response) => {
-      //   console.log(params.id)
-      //   const { data } = response
-      //   this.comments = response.data.data
-      //   console.log(this.comments)
-      // })
+      var firstCommentId = this.firstCommentId
+      getSecondComments(firstCommentId).then((response) => {
+        this.comments = response
+        console.log(this.comments)
+      })
     }
   }
 }
