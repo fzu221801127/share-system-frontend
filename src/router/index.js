@@ -79,12 +79,6 @@ export const constantRoutes = [
         name: 'Post',
         component: () => import('@/views/manage/post/index'),
         meta: { title: '资源管理', icon: 'tree' }
-      },
-      {
-        path: 'student',
-        name: 'Student',
-        component: () => import('@/views/student/index'),
-        meta: { title: 'Student', icon: 'table' }
       }
     ]
   },
