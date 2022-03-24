@@ -19,7 +19,7 @@
         width: 82%;
         border-top: solid #b0c4de 1px;
         padding-left: 0px;
-        padding-top: 18px;
+        padding-top: 0px;
       "
     >
       <el-container>
@@ -33,6 +33,7 @@
                 height: 50px;
                 margin-left: 25px;
                 padding: 0;
+                margin-top:10px;
                 line-height: 0;
               "
             >
@@ -57,15 +58,9 @@
           <el-main style="font-size: 16px">
             {{ comment.content }}
           </el-main>
-          <el-footer>
-            <div style="float: right">
+          <el-footer style="height:45px">
+            <div style="float: right;padding-top:20px">
               <span style="font-size: 15px;margin-right:10px">{{ comment.releasetime }}</span>
-              <!-- <el-button
-                round
-                style="background-color: #ff4949; color: white; font-size: 3px"
-                >点赞</el-button
-              > -->
-              <!-- <el-button type="text">举报</el-button> -->
             </div>
           </el-footer>
         </el-container>

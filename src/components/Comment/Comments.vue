@@ -53,16 +53,18 @@
               {{ comment.content }}
             </div>
           </el-main>
-          <el-footer>
-            <div style="float: right">
+          <el-footer style="height:80px">
+            <div style="float: right;padding-top:20px;">
               <span style="font-size: 15px;margin-right:10px">{{ comment.releasetime }}</span>
-              <!-- <el-button type="text">举报</el-button> -->
-              <br>
-              <el-button
-                type="text"
-                style="float: right"
-                @click="showForm(comment)"
-              >{{ buttonState }}</el-button>
+              <div>
+                <el-button
+                  type="text"
+                  style="float: right"
+                  @click="showForm(comment)"
+                >
+                  {{ buttonState }}
+                </el-button>
+              </div>
             </div>
           </el-footer>
         </el-container>
