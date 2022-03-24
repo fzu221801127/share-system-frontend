@@ -120,6 +120,7 @@
 <script>
 // import Schart from 'vue-schart'
 // import { reactive } from 'vue'
+import { logout, getInfo } from '@/api/user'
 export default {
   name: 'Echarts',
   data() {
@@ -135,6 +136,18 @@ export default {
           title: '标题2'
         }
       ]
+    }
+  },
+  created() {
+    if (this.$session.get('userinfo') != null) {
+      var userinfo = this.$session.get('userinfo')
+      console.log(userinfo.id)
+    } else {
+      logout()
+      getInfo().then(res => {
+        console.log('res:')
+        console.log(res)
+      })
     }
   },
   mounted() {

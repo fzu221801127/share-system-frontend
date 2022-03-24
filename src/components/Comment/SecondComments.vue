@@ -15,15 +15,15 @@
       :key="comment.id"
       style="
         background-color: #f3f3f3;
-        margin-left: 20%;
-        width: 79%;
+        margin-left: 17%;
+        width: 82%;
         border-top: solid #b0c4de 1px;
-        padding-left: 20px;
-        padding-top: 20px;
+        padding-left: 0px;
+        padding-top: 18px;
       "
     >
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="120px">
           <div>
             <img
               :src="imgUrl"
@@ -31,21 +31,22 @@
               style="
                 width: 50px;
                 height: 50px;
-                margin: 0;
+                margin-left: 25px;
                 padding: 0;
                 line-height: 0;
               "
             >
             <div
               style="
-                font-size: 18px;
+                font-size: 15px;
                 width: 80%;
                 padding: 0;
-                margin-left: 4%;
+                margin-left: 0;
                 word-break: break-all;
                 white-space: normal;
                 line-height: 20px;
                 position: relative;
+                text-align: center;
               "
             >
               {{ comment.userId }}
@@ -53,7 +54,7 @@
           </div>
         </el-aside>
         <el-container>
-          <el-main style="font-size: 20px">
+          <el-main style="font-size: 16px">
             {{ comment.content }}
           </el-main>
           <el-footer>

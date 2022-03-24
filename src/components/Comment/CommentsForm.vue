@@ -36,8 +36,10 @@
 </template>
 
 <script>
-// import { pushComment } from '@/api/comment'
-import store from '@/store'
+import { insertFirstComment } from '@/api/comment'
+import { logout, getInfo } from '@/api/user'
+import { getNowTime } from '@/utils/time'
+// import store from '@/store'
 export default {
   name: 'LvCommentsForm',
   props: {
@@ -59,36 +61,42 @@ export default {
   },
   methods: {
     async onSubmit() {
-      // this.isLoading = true
-      console.log(this.blogId)
-      console.log(store.getters.user.name)
-      // var data = {
-      //   'author': store.getters.user.name,
-      //   'blogId': this.blogId,
-      //   'content': this.textarea,
-      //   'id': 0,
-      //   'releaseTime': ''
-      // }
-      // pushComment(data).then((response) => {
-      //   try {
-      //     const { data } = response
-      //     // eslint-disable-next-line eqeqeq
-      //     if (data.code == '200') {
-      //       this.$message.success('留言成功')
-      //       setTimeout(() => {
-      //         location.reload()
-      //       }, 800)
-      //     }
-      //   } catch (e) {
-      //     this.message({
-      //       message: `Cannot comment this story. ${e}`,
-      //       type: 'is-danger'
-      //     })
-      //   } finally {
-      //     this.isLoading = false
-      //   }
-      // })
-      // this.textarea = ''
+      if (this.$session.get('userinfo') != null) {
+        var userinfo = this.$session.get('userinfo')
+        console.log(userinfo.id)
+        this.isLoading = true
+        console.log(this.blogId)
+        var data = {
+          'postId': this.blogId,
+          'releasetime': getNowTime(),
+          'content': this.textarea,
+          'userId': userinfo.id
+        }
+        insertFirstComment(data).then((response) => {
+          try {
+            if (response) {
+              this.$message.success('留言成功')
+              setTimeout(() => {
+                location.reload()
+              }, 800)
+            }
+          } catch (e) {
+            this.$message({
+              message: `Cannot comment this story. ${e}`,
+              type: 'is-danger'
+            })
+          } finally {
+            this.isLoading = false
+          }
+        })
+        this.textarea = ''
+      } else {
+        logout()
+        getInfo().then(res => {
+          console.log('res:')
+          console.log(res)
+        })
+      }
     }
   }
 }

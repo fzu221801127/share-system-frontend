@@ -37,7 +37,9 @@
 </template>
 
 <script>
-// import { pushSecondComment } from '@/api/comment'
+import { logout, getInfo } from '@/api/user'
+import { getNowTime } from '@/utils/time'
+import { insertSecondComment } from '@/api/comment'
 export default {
   name: 'LvCommentsForm',
   props: {
@@ -63,51 +65,42 @@ export default {
   },
   methods: {
     async onSubmit() {
-      // this.isLoading = true
-      console.log(this.firstCommentId)
-      console.log(this.firstCommentAuthor)
-      // var data = {
-      //   "accountName": this.firstCommentAuthor,
-      //   "author": store.getters.user,
-      //   "commentId": this.firstCommentId,
-      //   "content": this.textarea,
-      //   "id": 1,
-      //   "releaseTime": ""
-      // }
-      // var data = {
-      //   'accountName': this.firstCommentAuthor,
-      //   'author': store.getters.user.name,
-      //   'commentId': this.firstCommentId,
-      //   'content': this.textarea,
-      //   'id': 1,
-      //   'releaseTime': ''
-      // }
-      // pushSecondComment(data).then((response) => {
-      //   try {
-      //     const { data } = response
-      //     if (data.code == '200') {
-      //       this.$message.success('留言成功')
-      //       setTimeout(() => {
-      //         location.reload()
-      //       }, 800)
-      //     }
-      //   } catch (e) {
-      //     this.message({
-      //       message: `Cannot comment this story. ${e}`,
-      //       type: 'is-danger'
-      //     })
-      //   } finally {
-      //     this.isLoading = false
-      //   }
-      // })
-      // this.textarea = ''
-      // let postData = {}
-      // console.log(this.commentText)
-      // postData['content'] = this.commentText
-      // postData['topic_id'] = this.slug
-      // await pushComment(postData)
-      // this.$emit('loadComments', this.slug)
-      // this.$message.success('留言成功')
+      if (this.$session.get('userinfo') != null) {
+        var userinfo = this.$session.get('userinfo')
+        console.log(userinfo.id)
+        this.isLoading = true
+        console.log(this.firstCommentId)
+        var data = {
+          'firstCommentId': this.firstCommentId,
+          'releasetime': getNowTime(),
+          'content': this.textarea,
+          'userId': userinfo.id
+        }
+        insertSecondComment(data).then((response) => {
+          try {
+            if (response) {
+              this.$message.success('留言成功')
+              setTimeout(() => {
+                location.reload()
+              }, 800)
+            }
+          } catch (e) {
+            this.message({
+              message: `Cannot comment this story. ${e}`,
+              type: 'is-danger'
+            })
+          } finally {
+            this.isLoading = false
+          }
+        })
+        this.textarea = ''
+      } else {
+        logout()
+        getInfo().then(res => {
+          console.log('res:')
+          console.log(res)
+        })
+      }
     }
   }
 }

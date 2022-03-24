@@ -12,18 +12,18 @@
     <div
       v-for="comment in comments"
       :key="comment.id"
-      style="background: white; border: solid #e3f3f3 1px"
+      style="background: white;border-top: solid #e3f3f3 1px"
     >
       <el-container>
-        <el-aside width="200px">
-          <div style="padding-left: 20px; padding-top: 20px">
+        <el-aside width="150px">
+          <div style="padding-left: 0px; padding-top: 20px">
             <img
               :src="imgUrl"
               alt="头像"
               style="
-                width: 100px;
-                height: 100px;
-                margin: 0;
+                width: 70px;
+                height: 70px;
+                margin-left: 6px;
                 padding: 0;
                 line-height: 0;
                 position: relative;
@@ -32,7 +32,7 @@
             >
             <div
               style="
-                font-size: 20px;
+                font-size: 18px;
                 width: 100%;
                 padding: 0;
                 margin: 0;
@@ -48,17 +48,13 @@
           </div>
         </el-aside>
         <el-container>
-          <el-main style="font-size: 20px">
+          <el-main style="font-size: 18px">
             <div style="word-wrap: break-word">
               {{ comment.content }}
             </div>
           </el-main>
-          <el-footer height="120px">
+          <el-footer>
             <div style="float: right">
-              <!-- <el-button round style="background-color: #ff4949; color: white"
-                >点赞</el-button
-              > -->
-              <br>
               <span style="font-size: 15px;margin-right:10px">{{ comment.releasetime }}</span>
               <!-- <el-button type="text">举报</el-button> -->
               <br>
@@ -73,7 +69,7 @@
       </el-container>
       <transition name="slide-fade">
         <div v-if="comment.SecondComment">
-          <div style="width: 79%; margin-left: 20%">
+          <div style="width: 82%; margin-left: 17%">
             <CreateSecondComment
               :first-comment-id="comment.id"
               :first-comment-author="comment.author"
