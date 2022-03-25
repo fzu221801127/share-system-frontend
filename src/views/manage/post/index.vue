@@ -415,7 +415,7 @@ export default {
       if (!this.input) {
         this.fetchData()
       } else {
-        searchPostByTitle(this.input).then(response => {
+        searchPostByTitle(this.input.trim()).then(response => {
           console.log('搜索输入框内容为:' + this.input)
           this.list = response
           this.currentPage = 1
