@@ -105,7 +105,7 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card shadow="hover">
-          <div style="text-align:center;color:white;font-weight:bold;height:400px">
+          <div style="text-align:center;color:black;font-weight:bold;height:400px">
             本月热门搜索
             <v-ThisMonthHotShearch />
           </div>

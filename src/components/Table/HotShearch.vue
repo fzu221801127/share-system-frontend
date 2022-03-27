@@ -56,7 +56,7 @@ export default {
           left: 'center',
           textStyle: { // 图例文字的样式
             color: 'black',
-            fontSize: 12
+            fontSize: 16
           }
         },
         tooltip: {
