@@ -105,12 +105,17 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-card shadow="hover">
-          <div id="main" style="width: 100%;height: 400px;" />
+          <div style="text-align:center;color:white;font-weight:bold;height:400px">
+            本月热门搜索
+            <v-ThisMonthHotShearch />
+          </div>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card shadow="hover">
-          <div id="main2" style="width: 100%;height: 400px;" />
+          <div style="text-align:center;height:400px">
+            <v-HotShearch />
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -120,9 +125,15 @@
 <script>
 // import Schart from 'vue-schart'
 // import { reactive } from 'vue'
+import ThisMonthHotShearch from '@/components/Table/ThisMonthHotShearch'
+import HotShearch from '@/components/Table/HotShearch'
 import { logout, getInfo } from '@/api/user'
 export default {
   name: 'Echarts',
+  components: {
+    'v-ThisMonthHotShearch': ThisMonthHotShearch,
+    'v-HotShearch': HotShearch
+  },
   data() {
     return {
       name: '谷雨',
@@ -154,51 +165,6 @@ export default {
     this.myEcharts()
   },
   methods: {
-    myEcharts() {
-      var myChart = this.$echarts.init(document.getElementById('main'))
-      // 配置图表
-      var option = {
-        title: {
-          text: 'echarts入门示例1'
-        },
-        tooltip: {},
-        legend: {
-          data: ['销量']
-        },
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      }
-      myChart.setOption(option)
-
-      var myChart2 = this.$echarts.init(document.getElementById('main2'))
-      // 配置图表
-      var option2 = {
-        title: {
-          text: 'echarts入门示例1'
-        },
-        tooltip: {},
-        legend: {
-          data: ['销量']
-        },
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      }
-      myChart2.setOption(option2)
-    }
   }
 }
 </script>
