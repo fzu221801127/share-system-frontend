@@ -13,17 +13,17 @@ export default {
   data() {
     return {
       data: [
-        { value: 40, name: 'rose 1' },
-        { value: 38, name: 'rose 2' },
-        { value: 32, name: 'rose 3' },
-        { value: 30, name: 'rose 4' },
-        { value: 28, name: 'rose 5' },
-        { value: 26, name: 'rose 6' },
-        { value: 22, name: 'rose 7' },
-        { value: 14, name: 'rose 8' },
-        { value: 7, name: 'rose 9' },
-        { value: 3, name: 'rose 10' },
-        { value: 6, name: 'rose 11' }
+        { value: 1, name: 'rose 1' },
+        { value: 1, name: 'rose 2' },
+        { value: 1, name: 'rose 3' },
+        { value: 1, name: 'rose 4' },
+        { value: 1, name: 'rose 5' },
+        { value: 1, name: 'rose 6' },
+        { value: 1, name: 'rose 7' },
+        { value: 1, name: 'rose 8' },
+        { value: 1, name: 'rose 9' },
+        { value: 1, name: 'rose 10' },
+        { value: 1, name: 'rose 11' }
       ],
       count: 0
     }
@@ -33,13 +33,26 @@ export default {
   mounted() {
     getTenHotShearchInThisMonth().then(response => {
       this.count = 0
-      for (let i = 0; i < 10; i++) {
-        this.data[i].value = response[i].count
-        this.data[i].name = response[i].content
-        this.count += response[i].count
+      console.log(response.length)
+      if (response.length >= 10) {
+        for (let i = 0; i < 10; i++) {
+          this.data[i].value = response[i].count
+          this.data[i].name = response[i].content
+          this.count += response[i].count
+        }
+      } else {
+        for (let i = 0; i < response.length; i++) {
+          this.data[i].value = response[i].count
+          this.data[i].name = response[i].content
+          this.count += response[i].count
+        }
       }
       getShearchCountInThisMonth().then(response => {
-        this.data[10].value = response - this.count
+        if (response > this.count) {
+          this.data[10].value = response - this.count
+        } else {
+          this.data[10].value = 0
+        }
         this.data[10].name = '其他'
         this.myEcharts()
       })
