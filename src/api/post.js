@@ -125,3 +125,17 @@ export function getPostById(id) {
     params: { id }
   })
 }
+
+/*
+ *@description:获取点击量前十文章
+ *@author: 庄威龙
+ *@date:
+ *@version: V1.0.0
+*/
+export function getTopTenClickPost(data) {
+  return request({
+    url: '/posts/topTenClick',
+    method: 'get',
+    data
+  })
+}

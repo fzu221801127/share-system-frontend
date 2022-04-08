@@ -32,8 +32,11 @@
           <el-progress :percentage="5.9" color="#f56c6c" />
         </el-card>
       </el-col>
-      <el-col :span="16">
-        <el-row :gutter="20" class="mgb20">
+      <el-col :span="16" style="height:550px">
+        <el-card shadow="hover">
+          <v-TopTenClickPost />
+        </el-card>
+        <!-- <el-row :gutter="20" class="mgb20">
           <el-col :span="8">
             <el-card shadow="hover" :body-style="{ padding: '0px' }">
               <div class="grid-content grid-con-1">
@@ -67,8 +70,8 @@
               </div>
             </el-card>
           </el-col>
-        </el-row>
-        <el-card shadow="hover" style="height:403px;">
+        </el-row> -->
+        <!-- <el-card shadow="hover" style="height:403px;">
           <template #header>
             <div class="clearfix">
               <span>待办事项</span>
@@ -99,7 +102,7 @@
               </template>
             </el-table-column>
           </el-table>
-        </el-card>
+        </el-card> -->
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -128,14 +131,17 @@
 import ThisMonthHotShearch from '@/components/Table/ThisMonthHotShearch'
 import HotShearch from '@/components/Table/HotShearch'
 import { logout, getInfo } from '@/api/user'
+import TopTenClickPost from '@/components/Table/TopTenClickPost'
 export default {
   name: 'Echarts',
   components: {
     'v-ThisMonthHotShearch': ThisMonthHotShearch,
-    'v-HotShearch': HotShearch
+    'v-HotShearch': HotShearch,
+    'v-TopTenClickPost': TopTenClickPost
   },
   data() {
     return {
+      img: require('@/assets/preview.jpg'),
       name: '谷雨',
       role: 'admin',
       todoList: [
